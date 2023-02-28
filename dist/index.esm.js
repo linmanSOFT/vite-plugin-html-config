@@ -89,16 +89,6 @@ function HtmlPlugin(rawOptions) {
         var resultHtmlStr = htmlSource;
         var htmlResult = [];
 
-        if (html) {
-          var result = Object.keys(html).map(function (key) {
-            return "".concat(key, "=\"").concat(html[key], "\"");
-          });
-
-          if (result.length) {
-            resultHtmlStr = htmlSource.replace(/<html (.*?)>/, "<html ".concat(result.join(" "), ">"));
-          }
-        }
-
         if (favicon) {
           htmlResult.push({
             tag: "link",
@@ -162,6 +152,16 @@ function HtmlPlugin(rawOptions) {
           preHeadScripts.forEach(function (script) {
             htmlResult.push(getScriptContent(script, "head-prepend"));
           });
+        }
+
+        if (html) {
+          var result = Object.keys(html).map(function (key) {
+            return "".concat(key, "=\"").concat(html[key], "\"");
+          });
+
+          if (result.length) {
+            resultHtmlStr = htmlSource.replace(/<html (.*?)>/, "<html ".concat(result.join(" "), ">"));
+          }
         }
 
         return {
