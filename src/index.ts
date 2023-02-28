@@ -5,6 +5,7 @@ export interface IHTMLTag {
 
 export type ScriptTag = Record<string, string | boolean> | string;
 export interface Options {
+  html?:IHTMLTag;
   favicon?: string;
   title?: string;
   metas?: IHTMLTag[];
@@ -16,6 +17,7 @@ export interface Options {
 }
 export default function HtmlPlugin(rawOptions: Options): Plugin {
   const {
+    html,
     favicon,
     title,
     headScripts = [],
@@ -59,9 +61,17 @@ export default function HtmlPlugin(rawOptions: Options): Plugin {
     name: "html-plugin",
     transformIndexHtml: {
       enforce: 'pre',
-      transform: (html: string) => {
-        let resultHtmlStr = html
+      transform: (htmlSource: string) => {
+        let resultHtmlStr = htmlSource
         const htmlResult = [] as HtmlTagDescriptor[];
+
+        if (html){
+          let result = Object.keys(html).map((key) => `${key}="${html[key]}"`);
+          if (result.length){
+            resultHtmlStr = htmlSource.replace(/<html (.*?)>/, "<html ".concat(result.join(" "), ">") );
+          }
+        }
+
         if (favicon) {
           htmlResult.push({
             tag: "link",
@@ -99,7 +109,7 @@ export default function HtmlPlugin(rawOptions: Options): Plugin {
         }
         if (title && title.length) {
           // 如果 title 原本就存在
-          resultHtmlStr = html.replace(
+          resultHtmlStr = htmlSource.replace(
             /<title>(.*?)<\/title>/,
             `<title>${title}</title>`
           )
