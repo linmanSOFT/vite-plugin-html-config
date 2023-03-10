@@ -160,7 +160,7 @@ function HtmlPlugin(rawOptions) {
           });
 
           if (result.length) {
-            resultHtmlStr = htmlSource.replace(/<html (.*?)>/, "<html ".concat(result.join(" "), ">"));
+            resultHtmlStr = resultHtmlStr.replace(/<html (.*?)>/, "<html ".concat(result.join(" "), ">"));
           }
         }
 

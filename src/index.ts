@@ -125,7 +125,7 @@ export default function HtmlPlugin(rawOptions: Options): Plugin {
         if (html){
           let result = Object.keys(html).map((key) => `${key}="${html[key]}"`);
           if (result.length){
-            resultHtmlStr = htmlSource.replace(/<html (.*?)>/, "<html ".concat(result.join(" "), ">") );
+            resultHtmlStr = resultHtmlStr.replace(/<html (.*?)>/, "<html ".concat(result.join(" "), ">") );
           }
         }
         return {
